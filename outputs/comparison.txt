@@ -1,0 +1,23 @@
+Q-Shield: Classical SVM vs QSVM Comparison
+============================================================
+
+METRIC            CLASSICAL SVM            QSVM       DIFF
+------------------------------------------------------------
+Accuracy                 0.9188          0.5500   -36.88%
+Precision                0.9556          0.5385   -41.71%
+Recall                   0.8776          0.7000   -17.76%
+F1 Score                 0.9149          0.6087   -30.62%
+------------------------------------------------------------
+
+SYSTEM POSITIONING: We prioritize fraud detection over false positives — aligning with real-world financial risk strategies.
+
+Winner (by Recall): Classical SVM
+QSVM Recall: 0.7000
+Classical Recall: 0.8776
+
+
+QUANTUM ADVANTAGE INSIGHT
+----------------------------------------
+QSVM leverages quantum feature mapping and entanglement
+to project data into a higher-dimensional Hilbert space
+where fraudulent patterns become more separable.

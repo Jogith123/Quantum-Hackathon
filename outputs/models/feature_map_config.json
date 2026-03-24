@@ -1,0 +1,10 @@
+{
+  "feature_dimension": 6,
+  "circuit_type": "ZZFeatureMap+TwoLocal (Ry+Rz+CX)",
+  "entanglement": "linear",
+  "n_params": 24,
+  "auto_qfm_recall": 0.5,
+  "adaptive_reps": 1,
+  "adaptive_entanglement": "linear",
+  "adaptive_recall": 0.0
+}

@@ -1,0 +1,104 @@
+{
+  "best": {
+    "reps": 1,
+    "entanglement": "linear",
+    "recall": 0.0,
+    "precision": 0.0,
+    "f1": 0.0,
+    "accuracy": 0.3333333333333333,
+    "time_s": 1.9,
+    "circuit_depth": 17
+  },
+  "all_results": [
+    {
+      "reps": 1,
+      "entanglement": "full",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.5,
+      "circuit_depth": 29
+    },
+    {
+      "reps": 1,
+      "entanglement": "linear",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 1.9,
+      "circuit_depth": 17
+    },
+    {
+      "reps": 1,
+      "entanglement": "circular",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.0,
+      "circuit_depth": 20
+    },
+    {
+      "reps": 2,
+      "entanglement": "full",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 3.0,
+      "circuit_depth": 49
+    },
+    {
+      "reps": 2,
+      "entanglement": "linear",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.2,
+      "circuit_depth": 25
+    },
+    {
+      "reps": 2,
+      "entanglement": "circular",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.2,
+      "circuit_depth": 40
+    },
+    {
+      "reps": 3,
+      "entanglement": "full",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 3.8,
+      "circuit_depth": 69
+    },
+    {
+      "reps": 3,
+      "entanglement": "linear",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.5,
+      "circuit_depth": 33
+    },
+    {
+      "reps": 3,
+      "entanglement": "circular",
+      "recall": 0.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.3333333333333333,
+      "time_s": 2.6,
+      "circuit_depth": 60
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+# Environment Setup
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dataset
+data/
+
+# Model & Output Artifacts
+outputs/kernel_train.npy
+outputs/kernel_test.npy
+*.joblib
+*.npy
+*.h5
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env*
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

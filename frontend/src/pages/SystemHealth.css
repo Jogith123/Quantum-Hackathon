@@ -1,0 +1,138 @@
+/* ── Health Cards ─────────────────────── */
+.health-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  transition: all 0.3s;
+}
+
+.health-card:hover { transform: translateY(-2px); }
+
+.hc-online { border-color: rgba(34, 197, 94, 0.3); }
+.hc-offline { border-color: rgba(239, 68, 68, 0.3); }
+.hc-warning { border-color: rgba(245, 158, 11, 0.3); }
+.hc-neutral { border-color: var(--border); }
+
+.hc-icon { font-size: 32px; margin-bottom: 4px; }
+
+.hc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.hc-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hc-online .hc-status { color: var(--legit-green); }
+.hc-offline .hc-status { color: var(--fraud-red); }
+.hc-warning .hc-status { color: var(--warning-amber); }
+.hc-neutral .hc-status { color: var(--text-secondary); }
+
+.hc-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.hc-btn { margin-top: 8px; font-size: 12px; }
+
+/* ── Uptime ─────────────────────── */
+.uptime-display {
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  letter-spacing: 4px;
+  padding: 16px 0;
+  text-shadow: 0 0 30px var(--accent-glow);
+}
+
+.uptime-sub {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Details ─────────────────────── */
+.detail-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+}
+
+.detail-row:last-child { border-bottom: none; }
+
+.dr-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.dr-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.text-green { color: var(--legit-green) !important; }
+.text-red { color: var(--fraud-red) !important; }
+
+/* ── Architecture ─────────────────────── */
+.arch-card { overflow-x: auto; }
+
+.arch-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 0;
+  flex-wrap: wrap;
+}
+
+.arch-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.arch-node:hover { transform: translateY(-2px); }
+
+.arch-node span:first-child { font-size: 24px; }
+
+.arch-plaid { background: rgba(34, 197, 94, 0.06); border-color: rgba(34, 197, 94, 0.2); }
+.arch-express { background: rgba(245, 158, 11, 0.06); border-color: rgba(245, 158, 11, 0.2); }
+.arch-fastapi { background: rgba(99, 102, 241, 0.06); border-color: rgba(99, 102, 241, 0.2); }
+.arch-quantum { background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.25); }
+.arch-react { background: rgba(6, 182, 212, 0.06); border-color: rgba(6, 182, 212, 0.2); }
+
+.arch-arrow {
+  font-size: 20px;
+  color: var(--text-muted);
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; color: var(--accent); }
+}

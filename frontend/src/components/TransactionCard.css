@@ -1,0 +1,209 @@
+.tx-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Fraud Highlight ─────────────────────────────── */
+.tx-fraud {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.tx-fraud.tx-new {
+  animation: slideIn 0.4s ease-out, fraud-flash 1.5s ease;
+}
+
+@keyframes fraud-flash {
+  0% { box-shadow: 0 0 0 0 var(--fraud-glow); }
+  30% { box-shadow: 0 0 30px 8px var(--fraud-glow); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ── Legit Highlight ─────────────────────────────── */
+.tx-legit {
+  border-color: var(--border);
+}
+
+.tx-legit.tx-new {
+  animation: slideIn 0.4s ease-out, legit-flash 1s ease;
+}
+
+@keyframes legit-flash {
+  0% { box-shadow: 0 0 0 0 var(--legit-glow); }
+  30% { box-shadow: 0 0 20px 4px var(--legit-glow); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.tx-card:hover {
+  transform: translateX(4px);
+  border-color: var(--accent);
+}
+
+/* ── Icon ─────────────────────────────── */
+.tx-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+/* ── Info ─────────────────────────────── */
+.tx-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tx-merchant {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.tx-meta span {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tx-category {
+  background: rgba(99, 102, 241, 0.1);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--accent) !important;
+}
+
+/* ── Amount ─────────────────────────────── */
+.tx-amount {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-primary);
+  min-width: 90px;
+  text-align: right;
+}
+
+/* ── Badge ─────────────────────────────── */
+.tx-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.badge-fraud {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--fraud-red);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-fraud .badge-dot {
+  background: var(--fraud-red);
+  box-shadow: 0 0 8px var(--fraud-glow);
+  animation: pulse-dot 0.8s infinite;
+}
+
+.badge-legit {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--legit-green);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.badge-legit .badge-dot {
+  background: var(--legit-green);
+  box-shadow: 0 0 6px var(--legit-glow);
+}
+
+/* ── Risk Bar ─────────────────────────────── */
+.tx-risk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.risk-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.risk-high {
+  background: linear-gradient(90deg, #f87171, #ef4444);
+  box-shadow: 0 0 8px var(--fraud-glow);
+}
+
+.risk-low {
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+}
+
+.risk-value {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-secondary);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 768px) {
+  .tx-card {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tx-risk { width: 100%; }
+  .tx-meta { flex-wrap: wrap; }
+}
