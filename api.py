@@ -24,11 +24,13 @@ import sys
 import json
 import asyncio
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
+load_dotenv()  # Load .env file at startup
 # Ensure project root is on path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -39,6 +41,7 @@ import config
 from modules.streaming import RealTimePredictor
 from modules.plaid_bridge import PlaidBridge
 from modules.logger import log_success, log_info
+from modules.fraud_response import handle_response, verify_otp
 
 
 # ── Initialize components ────────────────────────────────
@@ -88,6 +91,7 @@ app.add_middleware(
 # ═══════════════════════════════════════════════════════════
 class TransactionRequest(BaseModel):
     """Single transaction for fraud prediction."""
+    user_id: str = Field("user_123", description="User identifier")
     V1: float = Field(0.0, description="PCA component V1")
     V2: float = Field(0.0, description="PCA component V2")
     V3: float = Field(0.0, description="PCA component V3")
@@ -127,6 +131,14 @@ class PredictionResponse(BaseModel):
     risk_score: float
     risk_percentage: str
     model: str
+    action: str = Field("ALLOW", description="ALLOW, OTP, or BLOCK")
+    transaction_id: Optional[str] = Field(None, description="Transaction ID if OTP required")
+    sms_sent: bool = Field(False, description="Whether an SMS alert was sent")
+
+class OTPVerifyRequest(BaseModel):
+    """Request for OTP verification."""
+    transaction_id: str
+    otp: str
 
 
 class BatchRequest(BaseModel):
@@ -186,15 +198,12 @@ async def get_tuning_results():
 
 
 @app.post("/predict", response_model=PredictionResponse, tags=["Prediction"])
-async def predict_transaction(transaction: TransactionRequest):
+async def predict_transaction(transaction: TransactionRequest, background_tasks: BackgroundTasks):
     """
     Predict if a single transaction is fraudulent.
 
     Flow: Preprocess → Quantum Kernel → QSVM → Risk Score
-
-    The transaction is encoded into a quantum state, its similarity
-    to training data is computed via quantum kernel, and the QSVM
-    classifies it in high-dimensional Hilbert space.
+    Then routes through Q-Shield's response engine to dispatch SMS or OTP.
     """
     if not predictor.is_loaded:
         raise HTTPException(
@@ -206,6 +215,17 @@ async def predict_transaction(transaction: TransactionRequest):
         tx_dict = transaction.model_dump()
         result = predictor.predict(tx_dict)
         result["risk_percentage"] = f"{result['risk_score'] * 100:.1f}%"
+        
+        # Integrate Response Engine with Background Task for SMS
+        response_data = handle_response(
+            user_id=transaction.user_id,
+            risk_score=result["risk_score"],
+            amount=transaction.Amount,
+            background_tasks=background_tasks,
+            simulate_sms=False
+        )
+        result.update(response_data)
+        
         return PredictionResponse(**result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
@@ -231,6 +251,14 @@ async def predict_batch(batch: BatchRequest):
             tx_dict = tx.model_dump()
             result = predictor.predict(tx_dict)
             result["risk_percentage"] = f"{result['risk_score'] * 100:.1f}%"
+            
+            response_data = handle_response(
+                user_id=tx.user_id,
+                risk_score=result["risk_score"],
+                amount=tx.Amount,
+                simulate_sms=False
+            )
+            result.update(response_data)
             results.append(result)
 
         fraud_count = sum(1 for r in results if r["prediction"] == 1)
@@ -264,6 +292,14 @@ async def stream_predictions(batch: BatchRequest):
             result = predictor.predict(tx_dict)
             result["risk_percentage"] = f"{result['risk_score'] * 100:.1f}%"
             result["transaction_index"] = i
+            
+            response_data = handle_response(
+                user_id=tx.user_id,
+                risk_score=result["risk_score"],
+                amount=tx.Amount,
+                simulate_sms=False
+            )
+            result.update(response_data)
 
             yield f"data: {json.dumps(result)}\n\n"
             await asyncio.sleep(0.1)  # Small delay for streaming effect
@@ -278,6 +314,18 @@ async def stream_predictions(batch: BatchRequest):
             "Connection": "keep-alive",
         },
     )
+
+@app.post("/verify-otp", tags=["Prediction"])
+async def verify_otp_endpoint(req: OTPVerifyRequest):
+    """
+    Verify an OTP generated for a medium-risk transaction.
+    """
+    success = verify_otp(req.transaction_id, req.otp)
+    if success:
+        log_success(f"OTP verified successfully for tx: {req.transaction_id}")
+        return {"status": "success", "message": "Transaction Approved"}
+    else:
+        raise HTTPException(status_code=400, detail="Invalid or expired OTP")
 
 
 @app.get("/health", response_model=HealthResponse, tags=["System"])
@@ -404,6 +452,14 @@ async def plaid_quantum_scan():
 
             # Run through QSVM
             prediction = predictor.predict(quantum_features)
+            
+            # Response Engine Action
+            action_data = handle_response(
+                user_id="user_123", # Defaulting to test user for Plaid scan
+                risk_score=prediction["risk_score"],
+                amount=tx["amount"],
+                simulate_sms=False
+            )
 
             results.append({
                 "plaid_data": {
@@ -417,6 +473,8 @@ async def plaid_quantum_scan():
                     "label": prediction["label"],
                     "risk_score": prediction["risk_score"],
                     "risk_percentage": f"{prediction['risk_score'] * 100:.1f}%",
+                    "action": action_data["action"],
+                    "sms_sent": action_data["sms_sent"],
                     "confidence": prediction["confidence"],
                     "model": "QSVM",
                     "insight": "Analyzed via quantum kernel in Hilbert space",
